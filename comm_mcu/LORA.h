@@ -11,5 +11,5 @@
 
 #define LORA_BUFFER_SIZE 256
 
-void make_ATcommand(char* send_command, int16_t gps[3], int16_t qtn[4], int16_t atm, int16_t serv_in);
+void make_ATcommand(char* send_command, int32_t lat, int32_t lon, int16_t qtn[4], int16_t atm, int16_t serv_in);
 void send_ATcommand(char* send_command);

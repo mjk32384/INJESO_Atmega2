@@ -67,7 +67,7 @@ void UART1_init(void) {
 	
 	UCSR1B |= _BV(RXEN1);               //송수신 가능
 	UCSR1B |= _BV(TXEN1);
-	UCSR1B |= _BV(RXCIE1));				//수신 인터럽트 ON
+	UCSR1B |= _BV(RXCIE1);				//수신 인터럽트 ON
 }
 
 void UART1_transmit(unsigned char data) {

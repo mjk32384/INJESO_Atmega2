@@ -40,28 +40,28 @@ void SPI_MasterTransfer(char* SPI_txbuffer, char* SPI_rxbuffer){
 	PORTB |= (1 << PB0);	// Chip Select 비활성화
 }
 
-void split_master_data(int16_t qtn[4], int16_t atm, int16_t serv_in, uint8_t spi_buffer[12]) {
+void split_master_data(int16_t qtn[4], int16_t serv_in, int16_t atm, char spi_buffer[12]) {
 	// Load the {spi_buffer} with {qtn}, {atm}, and {serv_in} data
 	for (int i=0; i<4; i++) {
 		spi_buffer[2*i] = (qtn[i] >> 8) & 0xFF;
 		spi_buffer[2*i+1] = qtn[i] & 0xFF;
 	}
-	spi_buffer[8] = (atm >> 8) & 0xFF;
-	spi_buffer[9] = atm & 0xFF;
-	spi_buffer[10] = (serv_in >> 8) & 0xFF;
-	spi_buffer[11] = serv_in & 0xFF;
+	spi_buffer[8] = (serv_in >> 8) & 0xFF;
+	spi_buffer[9] = serv_in & 0xFF;
+	spi_buffer[10] = (atm >> 8) & 0xFF;
+	spi_buffer[11] = atm & 0xFF;
 }
 
-void concat_master_data(int16_t qtn[4], int16_t atm, int16_t serv_in, uint8_t spi_buffer[12]) {
+void concat_master_data(int16_t qtn[4], int16_t serv_in[1], int16_t atm[1], char spi_buffer[12]) {
 	// Concatenate the data from given {spi_buffer}
 	for (int i = 0; i < 4; i++) {
 		qtn[i] = (int16_t)(spi_buffer[2*i] << 8) | spi_buffer[2*i+1];
 	}
-	atm = (int16_t)(spi_buffer[8] << 8) | spi_buffer[9];
-	serv_in = (int16_t)(spi_buffer[10] << 8) | spi_buffer[11];
+	serv_in[0] = (int16_t)(spi_buffer[8] << 8) | spi_buffer[9];
+	atm[0] = (int16_t)(spi_buffer[10] << 8) | spi_buffer[11];
 }
 
-void split_slave_data(int32_t lat, int32_t lon, uint8_t spi_buffer[12]) {
+void split_slave_data(int32_t lat, int32_t lon, char spi_buffer[12]) {
 	// Load the {spi_buffer} with {lat}, {lon}
 	spi_buffer[0] = 0xFF;   // garbage
 	spi_buffer[1] = 0xFF; // garbage
@@ -83,7 +83,7 @@ void split_slave_data(int32_t lat, int32_t lon, uint8_t spi_buffer[12]) {
 
 }
 
-void concat_slave_data(int32_t lat, int32_t lon, uint8_t spi_buffer[12]) {
+void concat_slave_data(int32_t lat, int32_t lon, char spi_buffer[12]) {
 	// Concatenate the data from given {spi_buffer}
 	lat = (int32_t)(spi_buffer[2] << 24) | (spi_buffer[3] << 16) | (spi_buffer[4] << 8) | spi_buffer[5];
 	lon = (int32_t)(spi_buffer[6] << 24) | (spi_buffer[7] << 16) | (spi_buffer[8] << 8) | spi_buffer[9];

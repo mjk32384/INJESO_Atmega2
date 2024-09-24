@@ -9,7 +9,7 @@
 #include "LORA.h"
 
 
-void make_ATcommand(char* send_command, int16_t gps[3], int16_t qtn[4], int16_t atm, int16_t serv_in) {	
+void make_ATcommand(char* send_command, int32_t lat, int32_t lon, int16_t qtn[4], int16_t atm, int16_t serv_in) {	
 	/*	
 		<input parameter>
 		gps:		gps data.					[lat, lon, vel]
@@ -23,18 +23,19 @@ void make_ATcommand(char* send_command, int16_t gps[3], int16_t qtn[4], int16_t 
 	
 	// static char send_command[LORA_BUFFER_SIZE];
 	char data[LORA_BUFFER_SIZE];
-	char temp[16];	// temporary buffer to hold each number as a string
+	char temp[32];	// temporary buffer to hold each number as a string
 	int payload_length = 0;
 
 	// Initialize the data string
 	data[0] = '\0';
 
 	// Concatenate gps data
-	for (int i = 0; i < 3; i++) {
-		itoa(gps[i], temp, 10);             // Convert int to string
-		strcat(data, temp);             // Concatenate
-		strcat(data, "/");              // Add a space
-	}
+	itoa(lat, temp, 10);             // Convert int to string
+	strcat(data, temp);             // Concatenate
+	strcat(data, "/");              // Add a space
+	itoa(lon, temp, 10);             // Convert int to string
+	strcat(data, temp);             // Concatenate
+	strcat(data, "/");              // Add a space
 
 	// Concatenate qtn data
 	for (int i = 0; i < 4; i++) {
